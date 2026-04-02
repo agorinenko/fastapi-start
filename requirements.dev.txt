@@ -1,0 +1,12 @@
+-r requirements.txt
+
+pylint
+
+pytest
+pytest-asyncio
+
+coverage
+pytest-cov
+pytest-aiohttp
+pytest-mock
+pytest-env

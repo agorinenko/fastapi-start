@@ -1,0 +1,14 @@
+python-dotenv==1.1.0
+alembic==1.18.4
+sqlalchemy==2.0.48
+fastapi==0.135.3
+fastapi-cli==0.0.24
+pydantic==2.12.5
+asyncpg==0.31.0
+pydantic-settings==2.13.1
+celery==5.6.3
+redis==7.4.0
+starlette==1.0.0
+psycopg2-binary==2.9.11
+greenlet==3.3.2
+http-misc==1.0.7
