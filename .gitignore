@@ -269,3 +269,4 @@ modules.xml
 .history
 
 # End of https://www.gitignore.io/api/django,python,pycharm+all,visualstudiocode
+/celery-state
