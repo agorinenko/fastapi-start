@@ -15,17 +15,24 @@ transport_options = {
     'global_keyprefix': APP_SETTINGS.key_prefix,
     'retry_on_timeout': True,
     'socket_keepalive': True,
-    'socket_timeout': 10,
-    'socket_connect_timeout': 10,
-    'health_check_interval': 15,
+    'socket_timeout': APP_SETTINGS.broker_connection_timeout,
+    'socket_connect_timeout': APP_SETTINGS.broker_connection_timeout,
+    'health_check_interval': APP_SETTINGS.broker_heartbeat_interval,
     'max_connections': APP_SETTINGS.broker_pool_limit,
+    'retry_on_error': [ConnectionError, TimeoutError, OSError],
+    'retry_policy': {
+        'max_retries': APP_SETTINGS.broker_connection_max_retries,
+        'interval_start': 0.5,
+        'interval_step': 1,
+        'interval_max': 60,
+    }
 }
 
 app.conf.update(
     timezone='UTC',
+    beat_dburi=APP_SETTINGS.sync_db_url,
     beat_schedule=beat_schedule,
     worker_hijack_root_logger=APP_SETTINGS.worker_hijack_root_logger,
-
     accept_content=['json'],
     broker_transport_options=transport_options,
     broker_pool_limit=APP_SETTINGS.broker_pool_limit,
@@ -43,5 +50,8 @@ app.conf.update(
     broker_connection_retry_on_startup=True,
     broker_connection_retry=True,
     broker_connection_max_retries=None,
-    broker_connection_timeout=10,
+    broker_connection_timeout=APP_SETTINGS.broker_connection_timeout,
+    # Эти настройки не работают с Redis! Они предназначены только для RabbitMQ
+    # broker_heartbeat=APP_SETTINGS.broker_heartbeat,
+    # broker_heartbeat_checkrate=APP_SETTINGS.broker_heartbeat_checkrate
 )

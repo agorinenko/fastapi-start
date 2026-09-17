@@ -8,6 +8,7 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).parents[2]
 
+
 class AppSettings(BaseSettings):
     """ Конфигурация сервиса """
 
@@ -32,7 +33,7 @@ class AppSettings(BaseSettings):
     # Redis
     redis_host: str = Field(alias='REDIS_HOST', default='localhost')
     redis_port: int = Field(alias='REDIS_PORT', default=6379)
-    redis_channel: int = Field(alias='REDIS_CHANNEL', default='')
+    redis_channel: int = Field(alias='REDIS_CHANNEL', default=1)
     redis_user: str = Field(alias='REDIS_USER', default='')
     redis_password: str = Field(alias='REDIS_PASSWORD', default='')
 
@@ -48,6 +49,12 @@ class AppSettings(BaseSettings):
     worker_prefetch_multiplier: int = Field(alias='WORKER_PREFETCH_MULTIPLIER', default=4)
     worker_hijack_root_logger: bool = Field(alias='CELERY_HIJACK_ROOT_LOGGER', default=False)
 
+    broker_connection_max_retries: int = Field(alias='BROKER_CONNECT_MAX_RETRIES', default=100)
+    broker_connection_timeout: int = Field(alias='BROKER_CONNECT_TIMEOUT', default=30)
+    broker_heartbeat: int = Field(alias='BROKER_HEARTBEAT', default=120)
+    broker_heartbeat_checkrate: float = Field(alias='BROKER_HEARTBEAT_CHECKRATE', default=2.0)
+    broker_heartbeat_interval: int = Field(alias='BROKER_HEARTBEAT_INTERVAL', default=30)
+
     # Kafka
     topic_name: str = Field(alias='TOPIC_NAME', default='default-channel')
     kafka_bootstrap_servers: str = Field(alias='KAFKA_BOOTSTRAP_SERVERS', default='localhost:9092')
@@ -60,7 +67,6 @@ class AppSettings(BaseSettings):
     kafka_session_timeout_ms: int = Field(alias='KAFKA_SESSION_TIMEOUT_MS', default=10000)
     kafka_max_poll_interval_ms: int = Field(alias='KAFKA_MAX_POLL_INTERVAL_MS', default=300000)
     kafka_auto_offset_reset: str = Field(alias='KAFKA_AUTO_OFFSET_RESET', default='latest')
-
 
     @property
     def celery_broker_url(self) -> str:
@@ -86,7 +92,6 @@ class AppSettings(BaseSettings):
     def sync_db_test_url(self) -> str:
         return f'postgresql://{self.db_user}:{self.db_password}@{self.db_host}:{self.db_port}/test_{self.db_name}'
 
-
     @property
     def base_dir(self) -> Path:
         return BASE_DIR
@@ -100,7 +105,7 @@ APP_SETTINGS = AppSettings()
 
 
 def parse_str_to_list(param_value: str, default: list[str] | str | None = None,
-                      separator: str | None = ',') -> list[str]:
+                      separator: str | None = ',') -> list[str] | str | None:
     """
     Преобразование строки в список
     :param param_value: значение переменной окружения

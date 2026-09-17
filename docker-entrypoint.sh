@@ -13,7 +13,9 @@ case "$1" in
       exec celery -A web_app worker --loglevel=debug -E --pool=threads
       ;;
     beat)
-      exec celery -A web_app beat -l debug
+      exec celery -A web_app.celery beat \
+        -S sqlalchemy_celery_beat.schedulers:DatabaseScheduler \
+        -l debug
       ;;
     *)
       exec "$@"
