@@ -6,3 +6,9 @@ from web_app.celery import app
 logger = logging.getLogger(__name__)
 
 init_log()
+
+
+@app.task(bind=True)
+def ping(_):
+    """ Ping celery """
+    return 'pong'

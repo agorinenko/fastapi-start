@@ -18,10 +18,9 @@ class UserResponse(CamelModel):
 
 class HealthCheckResponse(CamelModel):
     """ Схема описания ответа запроса на проверку статуса сервиса """
-    ping_database: bool
+    services: dict
     status: bool
-    error_database: str | None = None
-    current_user: UserResponse | None = None
+
 
 
 
