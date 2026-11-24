@@ -86,11 +86,11 @@ class AppSettings(BaseSettings):
 
     @property
     def sync_db_url(self) -> str:
-        return f'postgresql://{self.db_user}:{self.db_password}@{self.db_host}:{self.db_port}/{self.db_name}'
+        return f'postgresql+psycopg2://{self.db_user}:{self.db_password}@{self.db_host}:{self.db_port}/{self.db_name}'
 
     @property
     def sync_db_test_url(self) -> str:
-        return f'postgresql://{self.db_user}:{self.db_password}@{self.db_host}:{self.db_port}/test_{self.db_name}'
+        return f'postgresql+psycopg2://{self.db_user}:{self.db_password}@{self.db_host}:{self.db_port}/test_{self.db_name}'
 
     @property
     def base_dir(self) -> Path:

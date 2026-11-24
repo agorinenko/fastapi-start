@@ -20,6 +20,11 @@ transport_options = {
     'health_check_interval': APP_SETTINGS.broker_heartbeat_interval,
     'max_connections': APP_SETTINGS.broker_pool_limit,
     'retry_on_error': [ConnectionError, TimeoutError, OSError],
+    # 'socket_keepalive_options': {
+    #     socket.TCP_KEEPIDLE: 30,
+    #     socket.TCP_KEEPINTVL: 5,
+    #     socket.TCP_KEEPCNT: 2,
+    # },
     'retry_policy': {
         'max_retries': APP_SETTINGS.broker_connection_max_retries,
         'interval_start': 0.5,
